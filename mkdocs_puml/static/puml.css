@@ -43,8 +43,8 @@ body[data-md-color-scheme="slate"] .puml.dark {
 }
 
 .puml .diagram {
+    height: auto !important;
     width: 100% !important;
-    min-height: 300px !important;
 }
 
 .puml .diagram.wide-svg {
