@@ -221,6 +221,12 @@ class PlantUMLPlugin(BasePlugin[PlantUMLConfig]):
         # shutil.copy(puml_js, dest_dir)
         shutil.copytree(static_dir, dest_dir, dirs_exist_ok=True)
 
+        # Make sure all the files in dest_dir are writable
+        for root, dirs, files in os.walk(dest_dir):
+            for file in files:
+                file_path = Path(root).joinpath(file)
+                file_path.chmod(0o644)
+
         self.storage.save()
 
     def _replace(self, key: str, content: str) -> str:
