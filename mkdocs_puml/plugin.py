@@ -81,6 +81,7 @@ class PlantUMLPlugin(BasePlugin[PlantUMLConfig]):
         self.puml = PlantUML(
             self.config.puml_url,
             verify_ssl=self.config.verify_ssl,
+            use_system_certificates=self.config.use_system_certificates,
             timeout=self.config.request_timeout
         )
         self.puml_keyword = self.config.puml_keyword

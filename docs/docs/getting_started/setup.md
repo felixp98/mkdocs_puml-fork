@@ -11,6 +11,7 @@
         puml_keyword: puml
         request_timeout: 300
         verify_ssl: true
+        use_system_certificates: true
         verbose: true
         theme:
           enabled: true
@@ -99,6 +100,24 @@ By default `verify_ssl` is set to `true`.
 
     - [HTTPX - SSL](https://www.python-httpx.org/advanced/ssl/#making-https-requests-to-a-local-server).
     - [HTTPX - Environment Variables](https://www.python-httpx.org/environment_variables/#ssl_cert_dir).
+
+### `use_system_certificates`
+
+This parameter allows `mkdocs_puml` to use the system certificate store for SSL verification.  
+By default `use_system_certificates` is set to `true`.
+
+???+ info "verify_ssl takes precedence"
+
+    The `verify_ssl` parameter takes precedence over `use_system_certificates`. If `verify_ssl` is set to `false`, 
+system certificates will not be used regardless of the `use_system_certificates` setting.
+
+To disable system certificate usage (and use `certifi`'s CA bundle instead or use a specific CA bundle with `SSL_CERT_FILE` or `SSL_CERT_DIR` environment variable):
+
+```yaml
+plugins:
+  - plantuml:
+      use_system_certificates: false
+```
 
 ### `verbose`
 
