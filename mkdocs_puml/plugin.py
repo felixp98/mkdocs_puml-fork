@@ -87,7 +87,16 @@ class PlantUMLPlugin(BasePlugin[PlantUMLConfig]):
         self.regex = re.compile(rf"```{self.puml_keyword}(\n.+?)```", flags=re.DOTALL)
 
         if self.config.theme.enabled:
-            self.themer = Theme(self.config.theme.url)
+            # Determine themes path for local file injection
+            config_file_dir = None
+            if self.config.theme.source == "local":
+                config_file_dir = os.path.dirname(config.config_file_path)
+            
+            self.themer = Theme(
+                source=self.config.theme.source,
+                url=self.config.theme.url,
+                config_file_dir=config_file_dir
+            )
 
             self.theme_light = self.config.theme.light
             self.theme_dark = self.config.theme.dark

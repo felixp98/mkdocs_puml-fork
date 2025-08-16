@@ -14,6 +14,7 @@
         verbose: true
         theme:
           enabled: true
+          source: url
           light: default/light
           dark: default/dark
           url: https://raw.githubusercontent.com/.../mkdocs_puml/.../themes/
@@ -188,6 +189,152 @@ as follows
 @startuml
 
 !include https://your.path/to/custom/themes/custom/light.puml
+```
+
+### Theme Sources
+
+The `mkdocs_puml` plugin supports three different sources for themes, controlled by the `source` parameter:
+
+- **`url`** (default): Themes are loaded using `!include` statements from external URLs
+- **`packaged`**: Themes are loaded from the pre-packaged themes included with the `mkdocs_puml` installation
+- **`local`**: Themes are loaded from local files on your system
+
+#### URL Source (Default)
+
+This is the traditional method where themes are injected using `!include` statements:
+
+```yaml
+plugins:
+  - plantuml:
+      theme:
+        # the following are the default values, no need to specify them explicitly
+        source: url
+        url: https://raw.githubusercontent.com/MikhailKravets/mkdocs_puml/master/themes/
+        light: default/light
+        dark: default/dark
+```
+
+This generates:
+```
+@startuml
+!include https://raw.githubusercontent.com/MikhailKravets/mkdocs_puml/themes/themes/default/light.puml
+Bob -> Alice
+@enduml
+```
+
+#### Packaged Source
+
+Use the pre-packaged themes that come with the `mkdocs_puml` installation:
+
+```yaml
+plugins:
+  - plantuml:
+      theme:
+        source: packaged
+        light: default/light
+        dark: default/dark
+```
+
+This method:
+- Works offline without internet access (when for example `raw.githubusercontent.com` is not accessible from the used PlantUML server)
+- Injects the theme content directly into the PlantUML diagram without using `!include`
+- Uses themes that are guaranteed to be available
+- Doesn't require downloading or managing theme files
+
+The packaged themes include all the themes from the [Themes Hub](../themes/index.md).
+
+This generates:  
+```
+@startuml
+<style>
+root {
+    --common-background: #f1f1f1;
+    FontName SansSerif
+    FontColor black
+    FontSize 14
+    ...
+}
+...
+</style>
+Bob -> Alice
+@enduml
+```
+
+#### Local Source
+
+Use local theme files for offline development and full customization control:
+
+```yaml
+plugins:
+  - plantuml:
+      theme:
+        source: local
+        light: themes/default/light # paths can be relative to the mkdocs.yml file or absolute
+        dark: themes/default/dark
+```
+
+When using `local` source, the plugin will:
+
+1. Look for theme files relative to your mkdocs.yml or use an absolute path (`.puml` suffix can be ommitted)
+2. Inject the theme content directly into the PlantUML diagram without using `!include`
+
+This generates:  
+```
+@startuml
+<style>
+root {
+    --common-background: #f1f1f1;
+    FontName SansSerif
+    FontColor black
+    FontSize 14
+    ...
+}
+...
+</style>
+Bob -> Alice
+@enduml
+```
+
+##### Example: Local Theme File Structure
+
+Place your theme files for example in a `themes/` directory next to mkdocs.yml at your project root:
+
+```
+your-project/
+├── mkdocs.yml
+├── docs/
+└── themes/
+    ├── default/
+    │   ├── light.puml
+    │   └── dark.puml
+    ├── catppuccin/
+    │   ├── latte.puml
+    │   └── mocha.puml
+    └── custom/
+        ├── light.puml
+        └── dark.puml
+```
+
+Then specify the theme paths relative to mkdocs.yml:
+
+```yaml
+plugins:
+  - plantuml:
+      theme:
+        source: local
+        light: themes/catppuccin/latte
+        dark: themes/catppuccin/mocha
+```
+
+You can also use absolute paths in your configuration:
+
+```yaml
+plugins:
+  - plantuml:
+      theme:
+        source: local
+        light: /path/to/your/themes/custom/light.puml
+        dark: /path/to/your/themes/custom/dark.puml
 ```
 
 ## Cache <cache>

@@ -33,6 +33,9 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup :: Markdown",
 ]
+include = [
+    "themes/**",
+]
 
 [tool.poetry.plugins."mkdocs.plugins"]
 plantuml = "mkdocs_puml.plugin:PlantUMLPlugin"

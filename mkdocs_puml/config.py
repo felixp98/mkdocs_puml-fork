@@ -16,6 +16,7 @@ class ThemeConfig(Config):
     enabled = Type(bool, default=True)
     light = Type(str, default="default/light")
     dark = Type(str, default="default/dark")
+    source = Choice(["url", "local", "packaged"], default="url")
 
     url = Type(
         str,
