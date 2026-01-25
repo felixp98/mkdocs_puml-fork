@@ -87,7 +87,7 @@ Using the system certificate store:
 ```yaml
 plugins:
   - plantuml:
-      verify_ssl: "system"
+      verify_ssl: system
 ```
 
 Disabling SSL verification:  
