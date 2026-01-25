@@ -36,8 +36,7 @@ class PlantUML:
     Attributes:
         base_url (str): Base URL to the PUML service
         num_workers (int): The size of pool to run requests in
-        verify_ssl (bool): Designates whether the ``requests`` should verify SSL certiticate
-        use_system_certificates (bool): Designates whether the ``requests`` should use system certificates
+        verify_ssl (bool|"system"): Designates whether the ``requests`` should verify SSL certiticate or use system certificates
         output_format (str): The output format for the diagrams (e.g., "svg" or "dsvg")
 
     Examples:
@@ -52,8 +51,7 @@ class PlantUML:
     def __init__(
         self,
         base_url: str,
-        verify_ssl: bool = True,
-        use_system_certificates: bool = True,
+        verify_ssl: bool|typing.Literal["system"] = True,
         output_format: str = "svg",
         timeout: int = 40,
     ):
@@ -62,15 +60,12 @@ class PlantUML:
         self.base_url = sanitize_url(base_url)
         self.base_url = f"{self.base_url}{output_format}/"
 
-        self.timeout = timeout
-        
-        if not verify_ssl:
-            self.verify = False
-        elif use_system_certificates:
+        if verify_ssl == "system":
             self.verify = ssl.create_default_context()
             self.verify.load_default_certs()
         else:
-            self.verify = True
+            self.verify = verify_ssl
+        self.timeout = timeout
 
     def translate(self, schemes: typing.Iterable[str]) -> typing.List[typing.Union[str, Fallback]]:
         """Translate PlantUML schemes into the received SVG image.
@@ -158,7 +153,7 @@ class PlantUML:
 
         Returns:
             Response: response from PlantUML server
-        """            
+        """
         async with AsyncClient(verify=self.verify, timeout=self.timeout) as client:
             return await client.get(uri)
 
