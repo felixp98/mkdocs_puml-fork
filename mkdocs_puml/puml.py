@@ -51,7 +51,7 @@ class PlantUML:
     def __init__(
         self,
         base_url: str,
-        verify_ssl: bool|typing.Literal["system"] = True,
+        verify_ssl: typing.Union[bool, typing.Literal["system"]] = True,
         output_format: str = "svg",
         timeout: int = 40,
     ):
